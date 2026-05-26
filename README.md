@@ -1,14 +1,14 @@
-# Atulya Convert
+# Atulya-All-File-Converter
 
 > **Private offline conversion for daily documents, scans and business files.** 📄📱
 
-![Atulya - One-click business automation](assets/atulya-hero.png)
+![Atulya-All-File-Converter banner](assets/atulya-hero.png)
 
 ![Status](https://img.shields.io/badge/status-roadmap-f59e0b)
 ![Privacy](https://img.shields.io/badge/privacy-offline--first-10b981)
 ![Platforms](https://img.shields.io/badge/planned-Android%20%7C%20desktop-2563eb)
 
-Atulya Convert is planned as a free converter for phone and desktop users who want practical PDF, scan, image and structured-data tools without uploading private files to a remote conversion service.
+Atulya-All-File-Converter is planned as a free converter for phone and desktop users who want practical PDF, scan, image and structured-data tools without uploading private files to a remote conversion service.
 
 > 🚧 This README is the product roadmap. Format fidelity and supported conversions will be documented only as they are tested.
 
@@ -54,10 +54,6 @@ flowchart LR
 ## 🔒 Privacy Promise
 
 Offline conversion is the default design goal. Any optional cloud or AI processing must be clearly disclosed and opt-in.
-
-## 🔗 Independent Atulya Projects
-
-This is a standalone product. Discover other independent Atulya repositories: [Automation Hub](https://github.com/atulyaai/Atulya-Automation-Hub) · [ERP](https://github.com/atulyaai/Atulya-Accounting-ERP) · [GST](https://github.com/atulyaai/Atulya-GST-Suite) · [SAP](https://github.com/atulyaai/Atulya-SAP-Automations) · [Office](https://github.com/atulyaai/Atulya-Office) · [HR](https://github.com/atulyaai/Atulya-HR-Suite) · [DataClean](https://github.com/atulyaai/Atulya-Data-Scruber) · [Invoice](https://github.com/atulyaai/Atulya-Invoice) · [Host](https://github.com/atulyaai/Atulya-Launch)
 
 ## 📜 License
 
