@@ -30,8 +30,7 @@ atulya-convert = "atulya_all_file_converter.cli:main"
 [tool.setuptools.dynamic]
 version = {attr = "atulya_all_file_converter.__version__"}
 
-[tool.setuptools.package-dir]
-src = "src"
 
 [tool.setuptools.packages.find]
-where = ["src"]
+include = ["*"]
+
