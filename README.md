@@ -21,7 +21,7 @@ Atulya Convert is planned as a free converter for phone and desktop users who wa
 | Images | Resize, compress and convert JPG/PNG/WebP |
 | Data | Excel/CSV/JSON conversion for practical business data |
 | Business capture | Invoice/receipt image to reviewable spreadsheet fields |
-| Sharing | Export locally and hand off to Atulya Invoice or DataClean |
+| Sharing | Save or share exported files through device controls |
 
 ## 🏗️ Architecture
 
@@ -30,7 +30,7 @@ flowchart LR
     FILE["Local File / Camera Scan"] --> ENGINE["On-Device Conversion Engine"]
     ENGINE --> PREVIEW["Preview & Correct"]
     PREVIEW --> EXPORT["PDF · Image · Spreadsheet"]
-    EXPORT --> MODULES["Invoice · DataClean · Office"]
+    EXPORT --> SHARE["Save / Share / Print"]
 ```
 
 ## 💻 Delivery Plan
@@ -39,7 +39,7 @@ flowchart LR
 |---|---|
 | Android | Offline-first application for scan, PDF and quick conversion |
 | Windows / macOS / Linux | Drag-and-drop desktop conversion queue |
-| Atulya One | Embedded conversion and document capture services |
+| CLI | Optional batch conversion for desktop power users |
 
 ## 🗺️ Roadmap
 
@@ -55,9 +55,9 @@ flowchart LR
 
 Offline conversion is the default design goal. Any optional cloud or AI processing must be clearly disclosed and opt-in.
 
-## 🔗 Ecosystem
+## 🔗 Independent Atulya Projects
 
-[Atulya Invoice](https://github.com/atulyaai/Atulya-Invoice) · [Atulya DataClean](https://github.com/atulyaai/Atulya-Data-Scruber) · [Atulya Office](https://github.com/atulyaai/Atulya-Office) · [Atulya One](https://github.com/atulyaai/Atulya-Automation-Hub)
+This is a standalone product. Discover other independent Atulya repositories: [Automation Hub](https://github.com/atulyaai/Atulya-Automation-Hub) · [ERP](https://github.com/atulyaai/Atulya-Accounting-ERP) · [GST](https://github.com/atulyaai/Atulya-GST-Suite) · [SAP](https://github.com/atulyaai/Atulya-SAP-Automations) · [Office](https://github.com/atulyaai/Atulya-Office) · [HR](https://github.com/atulyaai/Atulya-HR-Suite) · [DataClean](https://github.com/atulyaai/Atulya-Data-Scruber) · [Invoice](https://github.com/atulyaai/Atulya-Invoice) · [Host](https://github.com/atulyaai/Atulya-Launch)
 
 ## 📜 License
 
