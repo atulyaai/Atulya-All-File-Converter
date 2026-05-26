@@ -1,0 +1,37 @@
+[build-system]
+requires = ["setuptools>=64"]
+build-backend = "setuptools.backends._legacy:_Backend"
+
+[project]
+name = "atulya-all-file-converter"
+dynamic = ["version"]
+description = "Private offline PDF, image, document and media converter — any file to any format"
+readme = "README.md"
+license = {text = "MIT"}
+requires-python = ">=3.8"
+dependencies = [
+    "click>=8.0",
+    "pandas>=1.3",
+    "openpyxl>=3.0",
+    "xlsxwriter>=3.0",
+    "pillow>=9.0",
+    "python-dotenv>=0.20",
+    "rich>=12.0",
+]
+
+[project.optional-dependencies]
+pdf = ["PyMuPDF"]
+docx = ["python-docx"]
+all = ["PyMuPDF", "python-docx", "pdf2image"]
+
+[project.scripts]
+atulya-convert = "atulya_all_file_converter.cli:main"
+
+[tool.setuptools.dynamic]
+version = {attr = "atulya_all_file_converter.__version__"}
+
+[tool.setuptools.package-dir]
+src = "src"
+
+[tool.setuptools.packages.find]
+where = ["src"]
