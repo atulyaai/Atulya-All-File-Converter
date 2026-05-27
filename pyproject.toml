@@ -28,10 +28,12 @@ pdf = ["PyMuPDF"]
 docx = ["python-docx"]
 ocr = ["pytesseract"]
 ods = ["odfpy"]
-all = ["PyMuPDF", "python-docx", "pytesseract", "odfpy"]
+web = ["fastapi>=0.100", "uvicorn>=0.20", "python-multipart>=0.0.5"]
+all = ["PyMuPDF", "python-docx", "pytesseract", "odfpy", "fastapi>=0.100", "uvicorn>=0.20", "python-multipart>=0.0.5"]
 
 [project.scripts]
 atulya-convert = "atulya_all_file_converter.cli:main"
+atulya-convert-server = "atulya_all_file_converter.server:serve"
 
 [tool.setuptools.dynamic]
 version = {attr = "atulya_all_file_converter.__version__"}

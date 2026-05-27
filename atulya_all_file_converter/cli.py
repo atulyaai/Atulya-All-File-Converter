@@ -308,6 +308,18 @@ def detect(filepath):
     console.print(f"  Size: {format_size(os.path.getsize(filepath))}")
 
 
+@main.command()
+@click.option("--host", default="127.0.0.1", help="Host address")
+@click.option("--port", default=8080, type=int, help="Port number")
+@click.option("--open", "open_browser", is_flag=True, help="Open browser automatically")
+def serve(host, port, open_browser):
+    from .server import serve as run_server
+    if open_browser:
+        import webbrowser
+        webbrowser.open(f"http://{host}:{port}")
+    run_server(host=host, port=port)
+
+
 @main.command("list")
 def list_formats():
     table = Table(title="Supported Formats (40+)")
