@@ -15,94 +15,149 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - id: getver
-        run: echo "version=$(python -c 'import ast; print(ast.literal_eval(open(\"atulya_all_file_converter/__init__.py\").read().split(\"=\")[1].strip()))')" >> $GITHUB_OUTPUT
+        run: |
+          VER=$(python -c "import ast; print(ast.literal_eval(open('atulya_all_file_converter/__init__.py').read().split('=')[1].strip()))")
+          echo "version=$VER" >> $GITHUB_OUTPUT
 
   windows-exe:
     runs-on: windows-latest
     needs: version
     steps:
       - uses: actions/checkout@v4
-      - uses: actions/setup-python@v5 with: python-version: '3.11'
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
       - run: pip install -e . pyinstaller
       - run: pyinstaller --onefile --name atulya-convert --clean --noconfirm --console atulya_all_file_converter/cli.py
-      - uses: actions/upload-artifact@v4 with: name: atulya-convert-windows-x64.exe path: dist/atulya-convert.exe
+      - uses: actions/upload-artifact@v4
+        with:
+          name: atulya-convert-windows-x64
+          path: dist/atulya-convert.exe
 
   windows-msi:
     runs-on: windows-latest
     needs: version
     steps:
       - uses: actions/checkout@v4
-      - uses: actions/setup-python@v5 with: python-version: '3.11'
-      - run: pip install -e . nsist
-      - run: |
-          nsist atulya-convert-installer --name "Atulya Converter" --version ${{ needs.version.outputs.version }} --entry-point atulya_all_file_converter.cli:main --install-dir ProgramFiles/Atulya --include "atulya_all_file_converter/"
-      - uses: actions/upload-artifact@v4 with: name: atulya-convert-windows-x64.msi path: atulya-convert-installer/*.msi
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - run: pip install -e .
+      - uses: sayandberg/nsis-action@v1
+        with:
+          script: |
+            !include "MUI2.nsh"
+            Name "Atulya Converter ${{ needs.version.outputs.version }}"
+            OutFile "atulya-convert-installer.exe"
+            InstallDir "$PROGRAMFILES\Atulya"
+            Section "Install"
+              SetOutPath "$INSTDIR"
+              File /r "*.py"
+              File /r "atulya_all_file_converter\"
+            SectionEnd
+      - uses: actions/upload-artifact@v4
+        with:
+          name: atulya-convert-windows-x64-installer
+          path: atulya-convert-installer.exe
 
   linux-deb:
     runs-on: ubuntu-latest
     needs: version
     steps:
       - uses: actions/checkout@v4
-      - uses: actions/setup-python@v5 with: python-version: '3.11'
-      - run: pip install -e . pyinstaller
-      - run: pyinstaller --onefile --name atulya-convert --clean --noconfirm atulya_all_file_converter/cli.py
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
       - run: |
-          sudo apt-get update && sudo apt-get install -y fpm
+          pip install -e . pyinstaller
+          pyinstaller --onefile --name atulya-convert --clean --noconfirm atulya_all_file_converter/cli.py
+      - run: |
+          sudo apt-get update && sudo apt-get install -y ruby-dev
+          sudo gem install fpm
           fpm -s dir -t deb -n atulya-convert -v ${{ needs.version.outputs.version }} --prefix /usr/local/bin dist/atulya-convert=atulya-convert
-      - uses: actions/upload-artifact@v4 with: name: atulya-convert-linux-amd64.deb path: ./*.deb
+      - uses: actions/upload-artifact@v4
+        with:
+          name: atulya-convert-linux-amd64
+          path: ./*.deb
 
   linux-appimage:
     runs-on: ubuntu-latest
     needs: version
     steps:
       - uses: actions/checkout@v4
-      - uses: actions/setup-python@v5 with: python-version: '3.11'
-      - run: pip install -e . pyinstaller
-      - run: pyinstaller --onefile --name atulya-convert --clean --noconfirm atulya_all_file_converter/cli.py
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
       - run: |
-          wget -q https://github.com/AppImage/AppImageKit/releases/download/continuous/appimagetool-x86_64.AppImage -O appimagetool
-          chmod +x appimagetool
+          pip install -e . pyinstaller
+          pyinstaller --onefile --name atulya-convert --clean --noconfirm atulya_all_file_converter/cli.py
+      - run: |
           mkdir -p AppDir/usr/bin
           cp dist/atulya-convert AppDir/usr/bin/
-          echo '[Desktop Entry]
+          cat > AppDir/atulya-convert.desktop << 'EOF'
+          [Desktop Entry]
           Name=Atulya Converter
           Type=Application
           Exec=atulya-convert
-          Terminal=true' > AppDir/atulya-convert.desktop
-          ./appimagetool AppDir Atulya-Convert-${{ needs.version.outputs.version }}-x86_64.AppImage
-      - uses: actions/upload-artifact@v4 with: name: atulya-convert-linux-x86_64.AppImage path: ./*.AppImage
+          Terminal=true
+          Categories=Utility;
+          EOF
+          wget -q "https://github.com/AppImage/AppImageKit/releases/download/continuous/appimagetool-x86_64.AppImage" -O appimagetool
+          chmod +x appimagetool
+          ARCH=x86_64 ./appimagetool AppDir
+      - uses: actions/upload-artifact@v4
+        with:
+          name: atulya-convert-linux-x86_64.AppImage
+          path: ./*.AppImage
 
   android-apk:
     runs-on: ubuntu-latest
     needs: version
     steps:
       - uses: actions/checkout@v4
-      - uses: actions/setup-python@v5 with: python-version: '3.11'
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
       - run: |
           pip install buildozer cython
-          echo '[app]
+          cat > buildozer.spec << 'SPEC'
+          [app]
           title = Atulya Converter
           package.name = atulyaconvert
           package.domain = com.atulya
           version = ${{ needs.version.outputs.version }}
           requirements = python3,click,rich,pandas,openpyxl,xlsxwriter,pillow,pyyaml,tomli,tomli-w,chardet,kivy
           orientation = portrait
-          fullscreen = 0' > buildozer.spec
+          fullscreen = 0
+
+          [buildozer]
+          log_level = 2
+          SPEC
+          mkdir -p src
+          cp -r atulya_all_file_converter src/
           buildozer android debug
-      - uses: actions/upload-artifact@v4 with: name: atulya-convert-android.apk path: bin/*.apk
+      - uses: actions/upload-artifact@v4
+        with:
+          name: atulya-convert-android
+          path: bin/*.apk
 
   release:
     if: startsWith(github.ref, 'refs/tags/v')
     runs-on: ubuntu-latest
-    needs: [windows-exe, windows-msi, linux-deb, linux-appimage, android-apk]
+    needs:
+      - windows-exe
+      - windows-msi
+      - linux-deb
+      - linux-appimage
+      - android-apk
     steps:
       - uses: actions/download-artifact@v4
       - uses: softprops/action-gh-release@v1
         with:
           files: |
-            atulya-convert-windows-x64.exe/*.exe
-            atulya-convert-windows-x64.msi/*.msi
-            atulya-convert-linux-amd64.deb/*.deb
+            atulya-convert-windows-x64/atulya-convert.exe
+            atulya-convert-windows-x64-installer/atulya-convert-installer.exe
+            atulya-convert-linux-amd64/*.deb
             atulya-convert-linux-x86_64.AppImage/*.AppImage
-            atulya-convert-android.apk/*.apk
+            atulya-convert-android/*.apk
           generate_release_notes: true
