@@ -1,7 +1,5 @@
 import os
-import sys
 import json
-import struct
 import hashlib
 
 FORMATS = {
@@ -95,7 +93,7 @@ def detect_format_by_magic(filepath, bytes_to_read=256):
     for magic, fmt in MAGIC_BYTES.items():
         if head[:len(magic)] == magic:
             return fmt
-    if b"<?xml" in head[:100] or b"<" in head[:100] and b">" in head[:200]:
+    if b"<?xml" in head[:100] or (b"<" in head[:100] and b">" in head[:200]):
         return "xml"
     if b"<html" in head[:200] or b"<!DOCTYPE html" in head[:200]:
         return "html"
@@ -144,7 +142,7 @@ def compute_hash(filepath, algo="sha256"):
 
 def get_category(filepath):
     fmt = detect_format(filepath)
-    if fmt:
+    if fmt and fmt in FORMATS:
         return FORMATS[fmt]["cat"]
     return "binary"
 

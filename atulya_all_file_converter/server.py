@@ -1,9 +1,9 @@
 import os
-import sys
 import json
 import tempfile
 import uuid
 from pathlib import Path
+from typing import List
 
 from .core import convert_file, get_file_info, read_file, create_file, detect_format
 from .utils import FORMATS, format_size
@@ -11,7 +11,6 @@ from .utils import FORMATS, format_size
 try:
     from fastapi import FastAPI, UploadFile, File, Form, HTTPException
     from fastapi.responses import HTMLResponse, FileResponse, JSONResponse
-    from fastapi.staticfiles import StaticFiles
     import uvicorn
 except ImportError:
     FastAPI = None
@@ -325,7 +324,7 @@ async def api_create(fmt: str, name: str):
 
 
 @app.post("/api/batch")
-async def api_batch(files: list[UploadFile] = File(...), to_format: str = Form("")):
+async def api_batch(files: List[UploadFile] = File(...), to_format: str = Form("")):
     results = []
     for file in files:
         content = await file.read()

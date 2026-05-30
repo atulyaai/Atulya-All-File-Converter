@@ -7,7 +7,6 @@ import click
 from rich.console import Console
 from rich.table import Table
 from rich.syntax import Syntax
-from rich.markdown import Markdown
 from rich.panel import Panel
 
 from . import __version__

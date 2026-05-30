@@ -1,5 +1,4 @@
 import os
-import io
 import csv
 import json
 import re
@@ -13,7 +12,6 @@ import shutil
 import difflib
 import hashlib
 from xml.etree import ElementTree as ET
-from pathlib import Path
 
 from .utils import (
     FORMATS, IMAGE_EXTENSIONS, TEXT_EXTENSIONS, DATA_EXTENSIONS,
@@ -42,8 +40,6 @@ CATEGORY_TEMPLATES = {
     "log": "[2026-01-01 00:00:00] INFO  System started\n[2026-01-01 00:00:01] INFO  Ready\n",
     "cfg": "[server]\nhost = 0.0.0.0\nport = 8080\n\n[logging]\nlevel = info\n",
 }
-
-DOCX_TEMPLATE_B64 = None
 
 
 def read_file(filepath, encoding="utf-8"):
@@ -77,7 +73,7 @@ def read_file(filepath, encoding="utf-8"):
         return _read_docx(filepath)
     elif detect_format_by_ext(filepath) in ("py", "js", "css"):
         with open(filepath, "r", encoding=encoding, errors="replace") as f:
-            return {"format": fmt, "type": "code", "content": f.read(), "lines": f.name and None}
+            return {"format": fmt, "type": "code", "content": f.read(), "lines": None}
     else:
         with open(filepath, "r", encoding=encoding, errors="replace") as f:
             content = f.read()
@@ -226,10 +222,7 @@ def get_file_info(filepath):
             info["pages"] = len(doc)
             doc.close()
         except ImportError:
-            try:
-                info["pages"] = "unknown (install PyMuPDF)"
-            except Exception:
-                pass
+            info["pages"] = "unknown (install PyMuPDF)"
         except Exception:
             pass
 
@@ -380,13 +373,14 @@ def validate_file(filepath):
             issues.append(f"Invalid YAML: {e}")
     elif fmt in ("toml",):
         try:
-            import tomllib
-            with open(filepath, "rb") as f:
-                tomllib.load(f)
-        except ImportError:
-            import tomli
-            with open(filepath, "rb") as f:
-                tomli.load(f)
+            try:
+                import tomllib
+                with open(filepath, "rb") as f:
+                    tomllib.load(f)
+            except ImportError:
+                import tomli
+                with open(filepath, "rb") as f:
+                    tomli.load(f)
         except Exception as e:
             issues.append(f"Invalid TOML: {e}")
     elif fmt in ("csv", "tsv"):
@@ -862,8 +856,9 @@ def _read_spreadsheet(filepath):
         for row in ws.iter_rows(values_only=True):
             rows.append(list(row))
         sheets[sheet_name] = {"headers": rows[0] if rows else [], "rows": rows[1:] if len(rows) > 1 else []}
+    sheet_names = wb.sheetnames
     wb.close()
-    return {"format": "xlsx", "type": "workbook", "sheets": sheets, "sheet_names": wb.sheetnames}
+    return {"format": "xlsx", "type": "workbook", "sheets": sheets, "sheet_names": sheet_names}
 
 
 def _read_xml(filepath):
@@ -1075,9 +1070,12 @@ def _create_xlsx(output_path, kwargs):
 
 def _create_sqlite(output_path, kwargs):
     import sqlite3
+    import re as _re
     conn = sqlite3.connect(output_path)
     cursor = conn.cursor()
     table_name = kwargs.get("table", "items")
+    if not _re.match(r'^[a-zA-Z_][a-zA-Z0-9_]*$', table_name):
+        raise ValueError(f"Invalid table name: {table_name}")
     cursor.execute(f"CREATE TABLE IF NOT EXISTS {table_name} (id INTEGER PRIMARY KEY, name TEXT, value TEXT)")
     for i in range(kwargs.get("rows", 5)):
         cursor.execute(f"INSERT INTO {table_name} (name, value) VALUES (?, ?)", (f"item_{i}", f"value_{i}"))

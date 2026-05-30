@@ -17,7 +17,6 @@ dependencies = [
     "xlsxwriter>=3.0",
     "pillow>=9.0",
     "pyyaml>=6.0",
-    "python-dotenv>=0.20",
     "tomli>=2.0; python_version < '3.11'",
     "tomli-w>=1.0",
     "chardet>=5.0",
@@ -40,5 +39,5 @@ version = {attr = "atulya_all_file_converter.__version__"}
 
 
 [tool.setuptools.packages.find]
-include = ["*"]
+include = ["atulya_all_file_converter*"]
 
