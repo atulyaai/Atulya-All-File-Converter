@@ -1,12 +1,28 @@
-# Atulya-All-File-Converter
+<!-- Hero Banner -->
+<div align="center">
+  <img src="assets/atulya-hero.png" alt="Atulya All File Converter" width="100%"/>
+</div>
 
-> **Private offline conversion for daily documents, scans and business files.** 📄📱
+<div align="center">
+  <h1>
+    <img src="https://readme-typing-svg.herokuapp.com?font=Cinzel&weight=700&size=40&duration=4000&pause=1000&color=F7931A&center=true&vCenter=true&width=700&height=75&lines=ALL+FILE+CONVERTER;100%25+PRIVATE+OFFLINE+CONVERSION;PDF+%2B+SCAN+OCR+%2B+SPREADSHEETS;फाइल+परिवर्तक" alt="Atulya All File Converter" />
+  </h1>
+</div>
 
-![Atulya-All-File-Converter banner](assets/atulya-hero.png)
+<p align="center">
+  <em><strong>अतुल्य</strong> (Atulya) — Sovereign privacy on your device</em><br/>
+  <strong>Private, on-device document converter for phone and desktop: PDF merge/split/compress, camera scan with OCR, and image and Excel/CSV/JSON conversion without cloud uploads.</strong>
+</p>
 
-![Status](https://img.shields.io/badge/status-roadmap-f59e0b)
-![Privacy](https://img.shields.io/badge/privacy-offline--first-10b981)
-![Platforms](https://img.shields.io/badge/planned-Android%20%7C%20desktop-2563eb)
+<p align="center">
+  <a href="LICENSE"><img src="https://img.shields.io/badge/License-MIT-F7931A.svg?style=flat-square" alt="MIT License"/></a>
+  <a href="#"><img src="https://img.shields.io/badge/Status-Roadmap-f59e0b.svg?style=flat-square" alt="Roadmap"/></a>
+  <a href="#"><img src="https://img.shields.io/badge/Privacy-100%25_Offline-success.svg?style=flat-square" alt="Offline First"/></a>
+  <a href="#"><img src="https://img.shields.io/badge/Platforms-Android%20%7C%20Desktop%20%7C%20CLI-blue.svg?style=flat-square" alt="Platforms"/></a>
+  <img src="https://img.shields.io/badge/Made_in-India_🇮🇳-FF9933.svg?style=flat-square" alt="Made in India"/>
+</p>
+
+---
 
 Atulya-All-File-Converter is planned as a free converter for phone and desktop users who want practical PDF, scan, image and structured-data tools without uploading private files to a remote conversion service.
 
