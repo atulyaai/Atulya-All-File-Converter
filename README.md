@@ -1,6 +1,6 @@
 <!-- Hero Banner -->
 <div align="center">
-  <img src="assets/atulya-hero.png" alt="Atulya All File Converter" width="100%"/>
+  <img src="assets/converter_hero.jpg" alt="Atulya All File Converter" width="100%"/>
 </div>
 
 <div align="center">
