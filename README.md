@@ -5,72 +5,133 @@
 
 <div align="center">
   <h1>
-    <img src="https://readme-typing-svg.herokuapp.com?font=Cinzel&weight=700&size=40&duration=4000&pause=1000&color=F7931A&center=true&vCenter=true&width=700&height=75&lines=ALL+FILE+CONVERTER;100%25+PRIVATE+OFFLINE+CONVERSION;PDF+%2B+SCAN+OCR+%2B+SPREADSHEETS;फाइल+परिवर्तक" alt="Atulya All File Converter" />
+    <img src="https://readme-typing-svg.herokuapp.com?font=Cinzel&weight=700&size=40&duration=4000&pause=1000&color=F7931A&center=true&vCenter=true&width=700&height=75&lines=ALL+FILE+CONVERTER;100%25+PRIVATE+OFFLINE+CONVERSION;CLI+%2B+LOCAL+WEB+UI+%2B+40%2B+FORMATS;फाइल+परिवर्तक" alt="Atulya All File Converter" />
   </h1>
 </div>
 
 <p align="center">
   <em><strong>अतुल्य</strong> (Atulya) — Sovereign privacy on your device</em><br/>
-  <strong>Private, on-device document converter for phone and desktop: PDF merge/split/compress, camera scan with OCR, and image and Excel/CSV/JSON conversion without cloud uploads.</strong>
+  <strong>Cross-platform offline file converter and toolkit: convert 40+ formats, batch convert directories, run a local web GUI, and build standalone desktop/mobile packages with zero data leaves your machine.</strong>
 </p>
 
 <p align="center">
   <a href="LICENSE"><img src="https://img.shields.io/badge/License-MIT-F7931A.svg?style=flat-square" alt="MIT License"/></a>
-  <a href="#"><img src="https://img.shields.io/badge/Status-Roadmap-f59e0b.svg?style=flat-square" alt="Roadmap"/></a>
+  <a href="https://python.org"><img src="https://img.shields.io/badge/Python-3.9%2B-F7931A.svg?style=flat-square&logo=python&logoColor=white" alt="Python 3.9+"/></a>
+  <a href="#"><img src="https://img.shields.io/badge/Status-Active_CLI_%26_Web_UI-success.svg?style=flat-square" alt="Status: Active CLI"/></a>
+  <a href="#"><img src="https://img.shields.io/badge/Formats-40%2B_Supported-blue.svg?style=flat-square" alt="40+ Formats"/></a>
   <a href="#"><img src="https://img.shields.io/badge/Privacy-100%25_Offline-success.svg?style=flat-square" alt="Offline First"/></a>
-  <a href="#"><img src="https://img.shields.io/badge/Platforms-Android%20%7C%20Desktop%20%7C%20CLI-blue.svg?style=flat-square" alt="Platforms"/></a>
   <img src="https://img.shields.io/badge/Made_in-India_🇮🇳-FF9933.svg?style=flat-square" alt="Made in India"/>
 </p>
 
----
-
-Atulya-All-File-Converter is planned as a free converter for phone and desktop users who want practical PDF, scan, image and structured-data tools without uploading private files to a remote conversion service.
-
-> 🚧 This README is the product roadmap. Format fidelity and supported conversions will be documented only as they are tested.
-
-## 📱 First Useful Toolbox
-
-| Category | Planned tools |
-|---|---|
-| PDF | Merge, split, reorder, compress, watermark and sign |
-| Scan | Camera scan, crop, cleanup, OCR and searchable PDF |
-| Images | Resize, compress and convert JPG/PNG/WebP |
-| Data | Excel/CSV/JSON conversion for practical business data |
-| Business capture | Invoice/receipt image to reviewable spreadsheet fields |
-| Sharing | Save or share exported files through device controls |
-
-## 🏗️ Architecture
-
-```mermaid
-flowchart LR
-    FILE["Local File / Camera Scan"] --> ENGINE["On-Device Conversion Engine"]
-    ENGINE --> PREVIEW["Preview & Correct"]
-    PREVIEW --> EXPORT["PDF · Image · Spreadsheet"]
-    EXPORT --> SHARE["Save / Share / Print"]
+```
+ ┌─────────────────────────────────────────────────────────────────────────────┐
+ │                      ATULYA ALL FILE CONVERTER PIPELINE                     │
+ ├─────────────────────────────────────────────────────────────────────────────┤
+ │   📁 Input (Documents, Images, Tables, Data)                                │
+ │                         │                                                   │
+ │                         ▼                                                   │
+ │   ⚡ Engine (Core Conversion Engine · 40+ Formats · Zero Cloud Calls)        │
+ │                         │                                                   │
+ │         ┌───────────────┼───────────────┬───────────────┐                   │
+ │         ▼               ▼               ▼               ▼                   │
+ │   🖥️ Terminal CLI   🌐 Local Web UI   📦 Windows EXE  📱 Android APK       │
+ │   (atulya-convert)  (Built-in Serve)  (build_exe.bat) (build_apk.sh)        │
+ └─────────────────────────────────────────────────────────────────────────────┘
 ```
 
-## 💻 Delivery Plan
+---
 
-| Platform | Experience |
-|---|---|
-| Android | Offline-first application for scan, PDF and quick conversion |
-| Windows / macOS / Linux | Drag-and-drop desktop conversion queue |
-| CLI | Optional batch conversion for desktop power users |
+## ⚡ Quick Start
 
-## 🗺️ Roadmap
+### Installation
 
-| Phase | Delivery |
-|---|---|
-| 1 | Image-to-PDF, PDF merge/split and image compression |
-| 2 | OCR scans and searchable document export |
-| 3 | CSV/Excel/JSON conversions and batch work |
-| 4 | Invoice/receipt capture with review screen |
-| 5 | Desktop/mobile sync through user-controlled storage |
+```bash
+# Clone the repository
+git clone https://github.com/atulyaai/Atulya-All-File-Converter.git
+cd Atulya-All-File-Converter
 
-## 🔒 Privacy Promise
+# Install dependencies and CLI
+pip install -e .
+```
 
-Offline conversion is the default design goal. Any optional cloud or AI processing must be clearly disclosed and opt-in.
+Verify installation:
+```bash
+atulya-convert --help
+```
+
+---
+
+## 🚀 Key Interfaces
+
+### 1. 🖥️ Command-Line Interface (`atulya-convert`)
+
+```bash
+# Convert between any supported formats
+atulya-convert convert document.docx -o document.pdf
+atulya-convert convert data.xlsx -o data.csv
+atulya-convert convert picture.png -o picture.webp --quality 85
+
+# Batch convert an entire folder
+atulya-convert batch ./input_images/ -o ./output/ --format webp
+
+# Inspect file schema and metadata
+atulya-convert info report.pdf --all
+
+# Verify file integrity
+atulya-convert hash backup.zip --algo sha256
+
+# Split and merge files
+atulya-convert split big_dataset.csv --chunk 10MB
+atulya-convert merge "part_*.csv" -o combined.csv
+
+# Diff two structured files
+atulya-convert diff config_v1.json config_v2.json
+```
+
+### 2. 🌐 Local Offline Web UI (`serve`)
+
+Run your own private browser-based converter with drag-and-drop:
+
+```bash
+atulya-convert serve --port 8080 --open-browser
+```
+Opens a modern dark-glass web converter at `http://localhost:8080`. No internet required.
+
+---
+
+## 📦 Standalone Builds
+
+Pre-configured build scripts for standalone distributables:
+
+| Target | Build Script | Output |
+|---|---|---|
+| **Windows** | `build_exe.bat` | Single standalone `.exe` (PyInstaller) |
+| **Android** | `build_apk.sh` | On-device Android conversion package |
+| **Linux** | `build_linux.sh` | Portable binary executable |
+
+---
+
+## 📑 Supported Formats (40+)
+
+To see the live registry of all supported formats and engines on your machine:
+```bash
+atulya-convert list
+```
+
+- **Documents**: PDF, DOCX, TXT, MD, RTF, HTML
+- **Spreadsheets & Data**: XLSX, XLS, CSV, TSV, JSON, XML, YAML
+- **Images**: JPG, PNG, WEBP, BMP, TIFF, GIF, ICO, SVG
+- **Archives**: ZIP, TAR, GZ, BZ2
+
+---
+
+## 🔒 Privacy Guarantee
+
+- **100% Offline**: All parsing and transformations occur in local process memory.
+- **Zero Telemetry**: No logs or files are transmitted outside your device.
+
+---
 
 ## 📜 License
 
-MIT planned for Atulya-authored source; bundled converter dependencies retain their licenses.
+MIT License. Copyright (c) 2026 Atulya AI.
