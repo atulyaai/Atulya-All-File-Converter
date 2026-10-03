@@ -134,4 +134,4 @@ atulya-convert list
 
 ## 📜 License
 
-MIT License. Copyright (c) 2026 Atulya AI.
+MIT License. Copyright (c) 2026 Atulya AI (atulyaai). See [LICENSE](LICENSE).
