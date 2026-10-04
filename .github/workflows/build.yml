@@ -34,6 +34,26 @@ jobs:
           name: atulya-convert-windows-x64
           path: dist/atulya-convert.exe
 
+  macos-dmg:
+    runs-on: macos-latest
+    needs: version
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - run: |
+          pip install -e . pyinstaller
+          pyinstaller --onefile --name atulya-convert --clean --noconfirm atulya_all_file_converter/cli.py
+      - run: |
+          mkdir dmg-root
+          cp dist/atulya-convert dmg-root/
+          hdiutil create -volname "Atulya Converter" -srcfolder dmg-root -ov -format UDZO atulya-convert-macos.dmg
+      - uses: actions/upload-artifact@v4
+        with:
+          name: atulya-convert-macos
+          path: atulya-convert-macos.dmg
+
   windows-msi:
     runs-on: windows-latest
     needs: version
@@ -147,6 +167,7 @@ jobs:
     needs:
       - windows-exe
       - windows-msi
+      - macos-dmg
       - linux-deb
       - linux-appimage
       - android-apk
@@ -159,5 +180,6 @@ jobs:
             atulya-convert-windows-x64-installer/atulya-convert-installer.exe
             atulya-convert-linux-amd64/*.deb
             atulya-convert-linux-x86_64.AppImage/*.AppImage
+            atulya-convert-macos/*.dmg
             atulya-convert-android/*.apk
           generate_release_notes: true

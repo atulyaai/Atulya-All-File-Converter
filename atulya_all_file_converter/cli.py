@@ -13,7 +13,7 @@ from . import __version__
 from .core import (
     convert_file, get_file_info, batch_convert,
     compute_file_hash, split_file, merge_files,
-    compress_archive, extract_archive, validate_file,
+    extract_archive, validate_file,
     search_file, count_stats, show_schema,
     generate_random, diff_files, read_file, write_file, create_file,
 )
@@ -282,7 +282,15 @@ def diff(file_a, file_b):
 @click.option("-q", "--quality", default=90, type=int)
 def batch(input_dir, pattern, output_dir, output_format, quality):
     os.makedirs(output_dir, exist_ok=True)
-    results = batch_convert(input_dir, pattern, output_dir, output_format, quality=quality)
+    from rich.progress import Progress
+    import glob
+    total = len(glob.glob(os.path.join(input_dir, pattern)))
+    with Progress(console=console) as bar:
+        task = bar.add_task("Converting", total=total)
+        results = batch_convert(
+            input_dir, pattern, output_dir, output_format, quality=quality,
+            progress=lambda done, _total, name: bar.update(task, completed=done, description=name),
+        )
     table = Table(title=f"Batch: {pattern} -> .{output_format}")
     table.add_column("File")
     table.add_column("Status")

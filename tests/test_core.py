@@ -50,3 +50,17 @@ def test_batch_convert(csv_file, tmp_path):
 
 def test_file_hash(csv_file):
     assert core.compute_file_hash(csv_file)
+
+
+def test_batch_progress_callback(csv_file, tmp_path):
+    import os
+    calls = []
+    core.batch_convert(os.path.dirname(csv_file), "*.csv", str(tmp_path / "p"), "json",
+                       progress=lambda d, t, n: calls.append((d, t, n)))
+    assert calls == [(1, 1, "data")]
+
+
+def test_batch_error_reported(tmp_path):
+    (tmp_path / "bad.json").write_text("{not json")
+    results = core.batch_convert(str(tmp_path), "*.json", str(tmp_path / "o"), "csv")
+    assert results[0][1] == "error"

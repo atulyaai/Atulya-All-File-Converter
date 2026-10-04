@@ -12,12 +12,12 @@
 ## 🔄 In Progress
 - [ ] Camera scan with perspective correction
 - [ ] Android APK (Buildozer)
-- [ ] Batch folder processing with progress bar
+- [x] Batch folder processing with progress bar
 
 ## 🔮 Planned
-- [ ] macOS .dmg build
+- [x] macOS .dmg build
 - [ ] Linux .deb / AppImage (CI already scaffolded)
-- [ ] DOCX ↔ PDF (LibreOffice headless)
-- [ ] Audio format convert (MP3 ↔ WAV ↔ OGG)
-- [ ] Video thumbnail extractor
+- [x] DOCX ↔ PDF (LibreOffice headless)
+- [x] Audio format convert (MP3 ↔ WAV ↔ OGG)
+- [x] Video thumbnail extractor
 - [ ] Integration with Atulya-Tantra (voice → convert command)

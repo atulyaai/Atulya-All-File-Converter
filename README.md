@@ -118,7 +118,9 @@ To see the live registry of all supported formats and engines on your machine:
 atulya-convert list
 ```
 
-- **Documents**: PDF, DOCX, TXT, MD, RTF, HTML
+- **Documents**: PDF, DOCX, TXT, MD, RTF, HTML (DOCX↔PDF needs LibreOffice)
+- **Audio**: MP3, WAV, OGG, FLAC, M4A (needs ffmpeg)
+- **Video**: thumbnail extraction to PNG/JPG (needs ffmpeg)
 - **Spreadsheets & Data**: XLSX, XLS, CSV, TSV, JSON, XML, YAML
 - **Images**: JPG, PNG, WEBP, BMP, TIFF, GIF, ICO, SVG
 - **Archives**: ZIP, TAR, GZ, BZ2

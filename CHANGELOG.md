@@ -7,8 +7,19 @@ Follows [Semantic Versioning](https://semver.org/) and [Keep a Changelog](https:
 
 ## [Unreleased]
 - Camera scan OCR with perspective correction
-- Batch folder conversion with progress UI
 - Android APK (Buildozer)
+
+### Added
+- DOCX/ODT/RTF to PDF and PDF to DOCX/ODT (LibreOffice headless; PDF to DOCX is text-only)
+- Audio conversion (MP3, WAV, OGG, FLAC, M4A) via ffmpeg
+- Video thumbnail extraction: `convert -i clip.mp4 -o thumb.png`
+- Batch conversion progress bar
+- macOS `.dmg` build in CI
+- Test suite and test CI workflow
+
+### Fixed
+- `.csv`/`.tsv` files were detected as plain text and converted incorrectly
+- `.wav` files were detected as WebP
 
 ---
 

@@ -12,6 +12,7 @@ import shutil
 import difflib
 from xml.etree import ElementTree as ET
 
+from . import media
 from .utils import (
     FORMATS, IMAGE_EXTENSIONS, TEXT_EXTENSIONS, DATA_EXTENSIONS,
     ARCHIVE_EXTENSIONS, DOCUMENT_EXTENSIONS,
@@ -599,11 +600,12 @@ def diff_files(filepath_a, filepath_b):
         }
 
 
-def batch_convert(input_dir, pattern, output_dir, output_format, **kwargs):
+def batch_convert(input_dir, pattern, output_dir, output_format, progress=None, **kwargs):
+    """Convert every file matching pattern. progress(done, total, name) is called after each file."""
     import glob
-    matched = glob.glob(os.path.join(input_dir, pattern))
+    matched = sorted(glob.glob(os.path.join(input_dir, pattern)))
     results = []
-    for input_path in sorted(matched):
+    for i, input_path in enumerate(matched, 1):
         base = os.path.splitext(os.path.basename(input_path))[0]
         output_path = os.path.join(output_dir, f"{base}.{output_format}")
         try:
@@ -611,6 +613,8 @@ def batch_convert(input_dir, pattern, output_dir, output_format, **kwargs):
             results.append((base, "ok", result))
         except Exception as e:
             results.append((base, "error", str(e)))
+        if progress:
+            progress(i, len(matched), base)
     return results
 
 
@@ -618,8 +622,16 @@ def batch_convert(input_dir, pattern, output_dir, output_format, **kwargs):
 
 def _convert_by_format(input_path, output_path, fmt_in, fmt_out, kwargs):
     ext_out = os.path.splitext(output_path.lower())[1]
+    ext_in = os.path.splitext(input_path.lower())[1]
 
-    if fmt_in in ("csv", "tsv", "xlsx", "ods") and fmt_out in ("csv", "tsv", "xlsx", "json", "html", "xml"):
+    if ext_in in media.AUDIO_EXTENSIONS and ext_out in media.AUDIO_EXTENSIONS:
+        media.convert_audio(input_path, output_path, kwargs.get("bitrate", "192k"))
+    elif ext_in in media.VIDEO_EXTENSIONS and ext_out in IMAGE_EXTENSIONS:
+        media.video_thumbnail(input_path, output_path, kwargs.get("at", 1.0))
+    elif (ext_in in media.OFFICE_EXTENSIONS and ext_out in (".pdf", ".docx", ".odt", ".rtf", ".txt", ".html")
+          and ext_in != ext_out) or (ext_in == ".pdf" and ext_out in (".docx", ".odt")):
+        media.convert_document(input_path, output_path)
+    elif fmt_in in ("csv", "tsv", "xlsx", "ods") and fmt_out in ("csv", "tsv", "xlsx", "json", "html", "xml"):
         _convert_tabular(input_path, output_path)
     elif fmt_in in ("json",) and fmt_out in ("csv", "xlsx", "xml", "yaml", "toml", "html"):
         _convert_json_to(input_path, output_path, fmt_out)

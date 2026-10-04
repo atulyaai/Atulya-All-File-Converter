@@ -37,6 +37,16 @@ FORMATS = {
     "bz2":   {"ext": [".bz2"],           "mime": "application/x-bzip2",    "cat": "archive"},
     "xz":    {"ext": [".xz"],            "mime": "application/x-xz",       "cat": "archive"},
     "sqlite":{"ext": [".sqlite", ".sqlite3", ".db"], "mime": "application/vnd.sqlite3", "cat": "database"},
+    "mp3":   {"ext": [".mp3"],           "mime": "audio/mpeg",             "cat": "audio"},
+    "wav":   {"ext": [".wav"],           "mime": "audio/wav",              "cat": "audio"},
+    "ogg":   {"ext": [".ogg", ".opus"],  "mime": "audio/ogg",              "cat": "audio"},
+    "flac":  {"ext": [".flac"],          "mime": "audio/flac",             "cat": "audio"},
+    "m4a":   {"ext": [".m4a", ".aac"],   "mime": "audio/mp4",              "cat": "audio"},
+    "mp4":   {"ext": [".mp4", ".m4v"],   "mime": "video/mp4",              "cat": "video"},
+    "mkv":   {"ext": [".mkv"],           "mime": "video/x-matroska",       "cat": "video"},
+    "webm":  {"ext": [".webm"],          "mime": "video/webm",             "cat": "video"},
+    "mov":   {"ext": [".mov"],           "mime": "video/quicktime",        "cat": "video"},
+    "avi":   {"ext": [".avi"],           "mime": "video/x-msvideo",        "cat": "video"},
     "log":   {"ext": [".log"],           "mime": "text/plain",             "cat": "text"},
     "cfg":   {"ext": [".cfg", ".conf"],  "mime": "text/x-config",          "cat": "text"},
     "env":   {"ext": [".env"],           "mime": "text/plain",             "cat": "text"},
@@ -105,6 +115,10 @@ def detect_format_by_magic(filepath, bytes_to_read=256):
 
 
 def detect_format(filepath):
+    ext_fmt = detect_format_by_ext(filepath)
+    if ext_fmt and FORMATS[ext_fmt]["cat"] in ("audio", "video"):
+        # Containers like RIFF/ID3 are ambiguous (wav vs webp); the extension wins.
+        return ext_fmt
     fmt = detect_format_by_magic(filepath)
     if fmt in ("zip",):
         ext_fmt = detect_format_by_ext(filepath)
