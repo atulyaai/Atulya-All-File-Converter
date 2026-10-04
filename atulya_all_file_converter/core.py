@@ -10,7 +10,6 @@ import bz2
 import lzma
 import shutil
 import difflib
-import hashlib
 from xml.etree import ElementTree as ET
 
 from .utils import (

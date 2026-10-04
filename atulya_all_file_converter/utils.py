@@ -110,7 +110,10 @@ def detect_format(filepath):
         ext_fmt = detect_format_by_ext(filepath)
         if ext_fmt in ("docx", "xlsx", "epub"):
             return ext_fmt
-    return fmt or detect_format_by_ext(filepath) or "bin"
+    if fmt in ("txt", "xml", "html", None):
+        # Content sniffing is only a generic guess for text; trust the extension.
+        return detect_format_by_ext(filepath) or fmt or "bin"
+    return fmt
 
 
 def format_size(size):
