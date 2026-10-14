@@ -10,23 +10,32 @@ pip install -e ".[all]"
 
 Individual extras: `pip install atulya-convert[pdf]` or `[docx]` or `[all]`.
 
-## Windows EXE (PyInstaller)
+## Windows EXE & System Installer
 
+### 1. Portable Standalone EXE (PyInstaller)
 ```batch
 build_exe.bat
 ```
-
 Produces `dist/atulya-convert.exe` — single-file, no Python required.
 
-## Android APK (Buildozer)
+### 2. Windows System Installer (NSIS)
+```batch
+build_installer.bat
+```
+Produces `dist/atulya-convert-installer.exe`:
+- Installs to `Program Files\Atulya File Converter`
+- Adds **Desktop** and **Start Menu** shortcuts
+- Adds **Windows File Explorer Context Menu** ("Convert with Atulya" on right-click)
+- Sets up clean registry uninstaller and adds `atulya-convert` to system PATH.
 
-Requires Linux (or WSL). Install Buildozer, then:
+## Android APK (Buildozer & GitHub Actions)
 
+Requires Linux, WSL, or automated via GitHub Actions:
 ```bash
 build_apk.sh
 ```
-
-Produces `bin/atulya_convert_*.apk`. Works on Android 8+ via Termux.
+Uses `main.py` as entry point and compiles native Android APK (`bin/atulya_convert_*.apk`).
+Works on Android 8+ devices with local offline conversion web studio.
 
 ## Linux (pip / .deb / AppImage)
 

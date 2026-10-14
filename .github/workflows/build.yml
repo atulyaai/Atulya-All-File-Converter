@@ -56,29 +56,20 @@ jobs:
 
   windows-msi:
     runs-on: windows-latest
-    needs: version
+    needs: [version, windows-exe]
     steps:
       - uses: actions/checkout@v4
-      - uses: actions/setup-python@v5
+      - uses: actions/download-artifact@v4
         with:
-          python-version: '3.11'
-      - run: pip install -e .
+          name: atulya-convert-windows-x64
+          path: dist
       - uses: sayandberg/nsis-action@v1
         with:
-          script: |
-            !include "MUI2.nsh"
-            Name "Atulya Converter ${{ needs.version.outputs.version }}"
-            OutFile "atulya-convert-installer.exe"
-            InstallDir "$PROGRAMFILES\Atulya"
-            Section "Install"
-              SetOutPath "$INSTDIR"
-              File /r "*.py"
-              File /r "atulya_all_file_converter\"
-            SectionEnd
+          script-file: installer.nsi
       - uses: actions/upload-artifact@v4
         with:
           name: atulya-convert-windows-x64-installer
-          path: atulya-convert-installer.exe
+          path: dist/atulya-convert-installer.exe
 
   linux-deb:
     runs-on: ubuntu-latest
@@ -154,6 +145,7 @@ jobs:
           log_level = 2
           SPEC
           mkdir -p src
+          cp main.py src/
           cp -r atulya_all_file_converter src/
           buildozer android debug
       - uses: actions/upload-artifact@v4
