@@ -337,3 +337,42 @@ def list_formats():
         table.add_row(fmt, ", ".join(info["ext"]), info["cat"])
     console.print(table)
     console.print("\n[dim]Reader/Writer/Creator/Converter — all in one[/dim]")
+
+
+@main.command()
+@click.option("--check", is_flag=True, help="Check for updates without downloading")
+def update(check):
+    """Check and install Over-The-Air (OTA) updates from GitHub."""
+    from . import __version__
+    from .updater import check_for_updates, download_and_apply_update
+
+    console.print(f"[bold cyan]Checking for updates... (Current version: v{__version__})[/bold cyan]")
+    info = check_for_updates(__version__)
+    if not info:
+        console.print("[green]You are running the latest version of Atulya File Converter.[/green]")
+        return
+
+    console.print(f"[bold green]New update available: {info['latest_version']}[/bold green]")
+    if info.get("release_name"):
+        console.print(f"Release: {info['release_name']}")
+    if info.get("asset_name"):
+        console.print(f"Asset: {info['asset_name']} ({format_size(info.get('asset_size', 0))})")
+
+    if check:
+        return
+
+    if not info.get("download_url"):
+        console.print(f"[yellow]No direct installer found for this platform. Please visit: {info['html_url']}[/yellow]")
+        return
+
+    if click.confirm("Do you want to download and install this update now?", default=True):
+        with Progress() as bar:
+            task = bar.add_task("Downloading update...", total=100)
+            def update_progress(percent):
+                bar.update(task, completed=percent)
+            success, msg = download_and_apply_update(info["download_url"], info["asset_name"], callback=update_progress)
+            if success:
+                console.print(f"[bold green]{msg}[/bold green]")
+            else:
+                console.print(f"[bold red]{msg}[/bold red]")
+
